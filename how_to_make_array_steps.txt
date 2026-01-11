@@ -1,0 +1,98 @@
+1. Fix scope
+
+* Select fitness domains + traits
+* Select final SNP budget (e.g., 50k / 100k / 200k)
+
+2. Set standards
+
+* Reference build: GRCh38
+* Canonical variant key: `chr:pos:ref:alt`
+* Allele convention: effect allele must match REF/ALT exactly
+
+3. Collect PRS sources (PGS)
+
+* Pick relevant PGS IDs
+* Download scoring files + metadata (version/date)
+
+4. Normalise PGS variants
+
+* Convert all variants to GRCh38 coordinates
+* Split/normalise multi-allelic → keep only clean biallelic SNPs
+* Remove indels (SNP-array focus)
+
+5. Harmonise alleles
+
+* Ensure REF/ALT from GRCh38 reference
+* Align effect allele to REF/ALT
+* Remove strand-ambiguous SNPs (A/T, C/G) unless resolvable
+
+6. Add Turkish AF + presence check
+
+* Join Turkish allele frequency by canonical key
+* Mark: present/not-present in Turkish open-genotype SNP set
+
+7. Technical array design filters
+
+* Remove SNPs in low-complexity/repeats / non-unique mapping regions
+* Remove SNPs too close to other variants (design interference)
+* Remove SNPs with allele patterns problematic for probe design (as per vendor rules)
+
+8. Population filters (Turkey)
+
+* Remove near-monomorphic SNPs in Turkish AF (choose cutoff)
+* Keep a spread of MAF bins for robust genotyping (ensure enough common markers)
+
+9. LD redundancy control
+
+* Create Turkish LD reference from your genotype data
+* Clump per trait (r² + window) to reduce redundancy
+* Keep “must-have” SNPs even if in LD (top-weight, functional, well-known loci)
+
+10. Build trait panels
+
+* For each trait/domain: compile candidate SNP list (post-clump)
+* Rank SNPs by: |weight|, PGS evidence strength, Turkish MAF, assayability flags
+
+11. Merge into one array content
+
+* Combine all trait lists
+* Deduplicate overlaps
+* Resolve conflicts (same position different allele definitions → drop or fix)
+
+12. Add backbone content (array utility)
+
+* Add genome-wide tag SNPs for ancestry/relatedness/QC
+* Add imputation backbone (Turkey-optimised if possible)
+* Add sex-check markers + contamination/sample-ID QC markers
+
+13. Final array QC list
+
+* Verify biallelic, unique positions, consistent build
+* Verify effect allele alignment for every scored SNP
+* Freeze final manifest: SNP ID, chr, pos, REF, ALT, rsID, effect allele, weight, trait, PGS source, Turkish AF, design flags
+
+14. Wet-lab/vendor handoff package
+
+* Provide final SNP manifest in vendor-required format
+* Provide strand/orientation requirements and exclusions list
+
+15. Software scoring deliverable
+
+* Produce PLINK2 scoring files per trait (A1=effect allele, weight)
+* Produce harmonisation script to map vendor output → canonical REF/ALT
+* Produce reporting: z-score + percentile using Turkish reference distribution
+
+16. Turkish reference distribution
+
+* Compute mean/SD + percentiles per trait PRS from Turkish cohort genotypes
+* Store as versioned reference tables
+
+17. Validation (genotype + score)
+
+* Genotyping QC metrics targets (call rate, cluster separation)
+* Score stability checks: missingness sensitivity, batch effects, subgroup checks
+
+18. Versioning + updates
+
+* Version panel (SNP set), scoring weights, Turkish AF reference, and pipelines
+* Define update triggers (new PGS releases, new Turkish AF dataset, array redesign)
