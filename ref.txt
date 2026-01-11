@@ -1,0 +1,53 @@
+## PRS reporting / best-practice
+
+* Wand H, et al. *Improving reporting standards for polygenic scores in risk prediction studies (PRS-RS).* **Nature (2021)**. ([Nature][1])
+* Choi SW, Mak TSH, O’Reilly PF. *Tutorial: a guide to performing polygenic risk score analyses.* **Nature Protocols (2020)**. ([Nature][2])
+
+## PGS / scoring-file sources & tooling
+
+* Lambert SA, et al. *The Polygenic Score Catalog as an open database for reproducibility and systematic evaluation.* **Nature Genetics (2021)**. ([Nature][3])
+* PGS Catalog – downloads & scoring files info (formats, FTP structure). ([pgscatalog.org][4])
+* Lambert SA, et al. *Enhancing the Polygenic Score Catalog with tools for score calculation…* **(2024)**. ([PMC][5])
+* pgsc_calc documentation (custom scoring file format + calculation workflow). ([pgsc-calc.readthedocs.io][6])
+
+## PRS construction methods / software
+
+* Choi SW, O’Reilly PF. *PRSice-2: Polygenic Risk Score software for biobank-scale data.* **GigaScience (2019)**. ([OUP Academic][7])
+* Privé F, et al. *LDpred2: better, faster, stronger.* **Bioinformatics (2020)**. ([OUP Academic][8])
+* Ge T, et al. *Polygenic prediction via Bayesian regression and continuous shrinkage priors (PRS-CS).* **Nature Communications (2019)**. ([PubMed][9])
+
+## Genotype data processing (SNP-array)
+
+* Chang CC, et al. *Second-generation PLINK: rising to the challenge of larger and richer datasets.* **GigaScience (2015)**. ([OUP Academic][10])
+
+## Transferability / population considerations
+
+* Martin AR, et al. *Clinical use of current polygenic risk scores may exacerbate health disparities.* **Nature Genetics (2019)**. ([Nature][11])
+
+## Turkish population resources (AF / structure)
+
+* Kars ME, et al. *The genetic structure of the Turkish population reveals high…* **PNAS (2021)**. ([PNAS][12])
+* Kotan LD, et al. *Comparative Analyses of Turkish Variome…* **J Clin Res Pediatr Endocrinol (2022)**. ([PMC][13])
+* Coban-Akdemir Z, et al. *The impact of the Turkish population variome…* **Genetics in Medicine Open (2024)**. ([gimopen.org][14])
+
+## SNP-array design / analysis (Axiom)
+
+* Thermo Fisher. *Axiom Genotyping Solution Data Analysis – User Guide* (2024). ([Thermo Fisher Documents][15])
+* Thermo Fisher. *Axiom myDesign custom genotyping arrays – technical note* (PDF). ([Thermo Fisher Documents][16])
+
+[1]: https://www.nature.com/articles/s41586-021-03243-6?utm_source=chatgpt.com "Improving reporting standards for polygenic scores in risk ..."
+[2]: https://www.nature.com/articles/s41596-020-0353-1?utm_source=chatgpt.com "Tutorial: a guide to performing polygenic risk score analyses"
+[3]: https://www.nature.com/articles/s41588-021-00783-5?utm_source=chatgpt.com "The Polygenic Score Catalog as an open database for ..."
+[4]: https://www.pgscatalog.org/downloads/?utm_source=chatgpt.com "PGS Catalog - Download Information"
+[5]: https://pmc.ncbi.nlm.nih.gov/articles/PMC12041910/?utm_source=chatgpt.com "Enhancing the Polygenic Score Catalog with tools for score ..."
+[6]: https://pgsc-calc.readthedocs.io/en/latest/how-to/calculate_custom.html?utm_source=chatgpt.com "How to use a custom scoring file - pgsc_calc - Read the Docs"
+[7]: https://academic.oup.com/gigascience/article/8/7/giz082/5532407?utm_source=chatgpt.com "PRSice-2: Polygenic Risk Score software for biobank-scale data"
+[8]: https://academic.oup.com/bioinformatics/article/36/22-23/5424/6039173?utm_source=chatgpt.com "LDpred2: better, faster, stronger - Oxford Academic"
+[9]: https://pubmed.ncbi.nlm.nih.gov/30992449/?utm_source=chatgpt.com "Polygenic prediction via Bayesian regression and continuous ..."
+[10]: https://academic.oup.com/gigascience/article/4/1/s13742-015-0047-8/2707533?utm_source=chatgpt.com "Second-generation PLINK: rising to the challenge of larger ..."
+[11]: https://www.nature.com/articles/s41588-019-0379-x?utm_source=chatgpt.com "Clinical use of current polygenic risk scores may ..."
+[12]: https://www.pnas.org/doi/10.1073/pnas.2026076118?utm_source=chatgpt.com "The genetic structure of the Turkish population reveals high ..."
+[13]: https://pmc.ncbi.nlm.nih.gov/articles/PMC9422916/?utm_source=chatgpt.com "Comparative Analyses of Turkish Variome and Widely Used ..."
+[14]: https://www.gimopen.org/article/S2949-7744%2824%2900976-2/fulltext?utm_source=chatgpt.com "The impact of the Turkish population variome on ..."
+[15]: https://documents.thermofisher.com/TFS-Assets/LSG/manuals/MAN0018363-AxiomDataAnalysis-UG-RUO.pdf?utm_source=chatgpt.com "Axiom™ Genotyping Solution Data Analysis - USER GUIDE"
+[16]: https://documents.thermofisher.com/TFS-Assets/LSG/brochures/axiom-mydesign-genotyping-technical-note.pdf?utm_source=chatgpt.com "Axiom myDesign custom genotyping arrays for human ..."
