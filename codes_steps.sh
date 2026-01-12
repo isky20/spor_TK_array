@@ -12,10 +12,10 @@ samtools faidx "$REF_FA"
 #2) Merge both into merged.harmonised.long.tsv.gz (with REF/ALT + PGS alleles)
 
 (
-  echo -e "varid\tchr\tpos\tref\talt\tA1\tbeta\tpgs_EA\tpgs_OA\tbeta_raw\tflip\tallele_fix\tmodel"
-  zcat PLR.harm.full.tsv.gz | awk 'NR>1{print $0"\tPLR"}'
-  zcat LDP.harm.full.tsv.gz | awk 'NR>1{print $0"\tLDpred2"}'
-) | gzip -c > merged.harmonised.long.tsv.gz
+  echo -e "varid\tchr\tpos\tref\talt\tA1\tbeta\tmodel"
+  zcat PLR.harm.full.tsv.gz | awk 'NR>1{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6"\t"$7"\tPLR"}'
+  zcat LDP.harm.full.tsv.gz | awk 'NR>1{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6"\t"$7"\tLDpred2"}'
+) | gzip -c > merged.harmonised.long.clean.tsv.gz
 
 
 zcat merged.harmonised.long.tsv.gz \
