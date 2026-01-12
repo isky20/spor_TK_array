@@ -18,7 +18,7 @@ samtools faidx "$REF_FA"
 ) | gzip -c > merged.harmonised.long.clean.tsv.gz
 
 
-zcat merged.harmonised.long.tsv.gz \
+zcat  merged.harmonised.long.clean.tsv.gz \
 | awk 'BEGIN{FS=OFS="\t"}
   NR==1{print $0,"chr_pos_ref_alt"; next}
   {print $0, $2"-"$3"-"$4"-"$5}
