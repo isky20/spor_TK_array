@@ -1,4 +1,4 @@
-1. **Download PGS scoring files** for your trait (PLR + LDpred2).
+1. **Download PGS scoring files** for the trait of interest with different Development Methods (PLR + LDpred2).
 
 2. **Harmonise each model** to one genome build (e.g., GRCh37):
 
@@ -9,7 +9,7 @@
 
 3. **Merge models (long format)**:
 
-   * stack rows and add `model` column (PLR / LDpred2)
+   * stack rows and add `model` column (PLR / LDpred2) 
 
 4. **Create panel SNP list**:
 
