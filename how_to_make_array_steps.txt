@@ -1,71 +1,49 @@
-1. **Freeze your panel rules**
+1. **Download PGS scoring files** for your trait (PLR + LDpred2).
 
-* Genome build (GRCh37 or GRCh38)
-* Variant ID format (`chr:pos:ref:alt`)
-* Effect allele rule (**ALT = effect allele**)
-* SNP-array constraints (target SNP count)
+2. **Harmonise each model** to one genome build (e.g., GRCh37):
 
-2. **Download PGS scoring files**
+   * keep SNP-only, biallelic-only
+   * enforce **ALT = effect allele (A1)**
+   * flip beta sign when needed
+   * output per model: `varid (chr:pos) , ref , alt , A1 , beta`
 
-* Choose PGS IDs for fitness traits
-* Keep metadata (PGS id, method, date, build)
+3. **Merge models (long format)**:
 
-3. **Harmonise PGS to your standard**
+   * stack rows and add `model` column (PLR / LDpred2)
 
-* LiftOver if needed (all to one build)
-* Remove non-biallelic + non-SNP
-* Align alleles; flip beta when needed to enforce **ALT effect**
-* Output: `varid  A1(ALT)  beta`
+4. **Create panel SNP list**:
 
-4. **Create the list of required variants**
+   * union both models
+   * deduplicate by `chr-pos-ref-alt` → `panel.chr-pos-ref-alt.txt`
 
-* Union all harmonised variants across selected PGS
-* Deduplicate by `chr:pos:ref:alt`
+5. **Bulk query TGD portal** with `panel.chr-pos-ref-alt.txt` using your script:
 
-5. **Query TGD Portal in bulk (your script)**
+   * save AF/AC/AN (+ HOM if available)
+   * keep status found / not found
 
-* Input: the union variant list (convert to TGD format)
-* Output: for each variant store:
+6. **QC TGD output**:
 
-  * AF (ALT frequency), AC/AN, hom count (if available)
-  * flags / clinical significance (optional)
-  * status: found / not found / error
+   * drop not found
+   * drop missing AF/AC/AN
+   * drop allele mismatches (PGS vs TGD ref/alt)
+   * (optional) drop strand-ambiguous A/T and C/G
 
-6. **Quality checks on TGD results**
+7. **Final Turkish panel list**:
 
-* Drop variants not found
-* Drop variants with missing AF/AN
-* Remove strand-ambiguous (A/T, C/G) unless resolvable
-* Check allele consistency between PGS alleles and TGD alleles (drop mismatches)
+   * `panel.PRSxTGD.txt` = SNPs present in both PRS model(s) and TGD
 
-7. **Turkish population filtering**
+8. **Prepare per-model score files** from the filtered set:
 
-* Apply MAF threshold using TGD AF (your rule)
-* Keep enough common markers for array performance (avoid too many monomorphic)
+   * PLR: `varid  A1  beta`
+   * LDpred2: `varid  A1  beta`
 
-8. **LD pruning (Turkey-aware)**
+9. **Score Turkish individuals** (from Turkish VCF/PLINK dataset):
 
-* Use Turkish genotype dataset (if you have PLINK) to clump/prune
-* Generate final per-trait SNP sets after LD control
+   * compute `PRS_PLR`
+   * compute `PRS_LDpred2`
 
-9. **SNP-array design filters**
+10. **Interpret within Turkish reference**:
 
-* Remove SNPs in problematic regions / duplicates / design failures (vendor rules)
-* Finalise assayable list
+* compute mean/sd in Turkish group for each model
+* z-score and percentile per individual (model-specific)
 
-10. **Build final deliverables**
-
-* **Panel manifest**: `chr pos ref alt rsID AF_TURK beta trait PGS_ID flags`
-* **Scoring files** per trait: `varid A1 beta`
-* **QC list**: sex markers, sample ID, contamination markers, ancestry backbone
-
-11. **Score + reference (if you have Turkish genotypes)**
-
-* Extract panel SNPs from Turkish genotypes
-* Compute PRS per trait
-* Create Turkish reference percentiles (mean/SD, deciles)
-
-12. **Version + lock**
-
-* Version panel SNP list, PGS sources, TGD snapshot date, pipeline code
-* Save all intermediate tables (harmonised PGS, TGD AF, final manifest)
