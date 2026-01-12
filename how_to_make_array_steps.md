@@ -1,6 +1,6 @@
-1. **Download PGS scoring files** for the trait of interest with different Development Methods (PLR + LDpred2).
+1. **Download PGS scoring files** for the trait of interest with different Development models (PLR + LDpred2).
 
-2. **Harmonise each model** to one genome build (e.g., GRCh37):
+2. **Harmonise each model** to one genome build (e.g., GRCh37): *04.harmonise_pgs_alt_effect_full.py*
 
    * keep SNP-only, biallelic-only
    * enforce **ALT = effect allele (A1)**
