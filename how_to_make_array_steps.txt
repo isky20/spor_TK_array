@@ -1,98 +1,71 @@
-1. Fix scope
+1. **Freeze your panel rules**
 
-* Select fitness domains + traits
-* Select final SNP budget (e.g., 50k / 100k / 200k)
+* Genome build (GRCh37 or GRCh38)
+* Variant ID format (`chr:pos:ref:alt`)
+* Effect allele rule (**ALT = effect allele**)
+* SNP-array constraints (target SNP count)
 
-2. Set standards
+2. **Download PGS scoring files**
 
-* Reference build: GRCh38
-* Canonical variant key: `chr:pos:ref:alt`
-* Allele convention: effect allele must match REF/ALT exactly
+* Choose PGS IDs for fitness traits
+* Keep metadata (PGS id, method, date, build)
 
-3. Collect PRS sources (PGS)
+3. **Harmonise PGS to your standard**
 
-* Pick relevant PGS IDs
-* Download scoring files + metadata (version/date)
+* LiftOver if needed (all to one build)
+* Remove non-biallelic + non-SNP
+* Align alleles; flip beta when needed to enforce **ALT effect**
+* Output: `varid  A1(ALT)  beta`
 
-4. Normalise PGS variants
+4. **Create the list of required variants**
 
-* Convert all variants to GRCh38 coordinates
-* Split/normalise multi-allelic → keep only clean biallelic SNPs
-* Remove indels (SNP-array focus)
+* Union all harmonised variants across selected PGS
+* Deduplicate by `chr:pos:ref:alt`
 
-5. Harmonise alleles
+5. **Query TGD Portal in bulk (your script)**
 
-* Ensure REF/ALT from GRCh38 reference
-* Align effect allele to REF/ALT
-* Remove strand-ambiguous SNPs (A/T, C/G) unless resolvable
+* Input: the union variant list (convert to TGD format)
+* Output: for each variant store:
 
-6. Add Turkish AF + presence check
+  * AF (ALT frequency), AC/AN, hom count (if available)
+  * flags / clinical significance (optional)
+  * status: found / not found / error
 
-* Join Turkish allele frequency by canonical key
-* Mark: present/not-present in Turkish open-genotype SNP set
+6. **Quality checks on TGD results**
 
-7. Technical array design filters
+* Drop variants not found
+* Drop variants with missing AF/AN
+* Remove strand-ambiguous (A/T, C/G) unless resolvable
+* Check allele consistency between PGS alleles and TGD alleles (drop mismatches)
 
-* Remove SNPs in low-complexity/repeats / non-unique mapping regions
-* Remove SNPs too close to other variants (design interference)
-* Remove SNPs with allele patterns problematic for probe design (as per vendor rules)
+7. **Turkish population filtering**
 
-8. Population filters (Turkey)
+* Apply MAF threshold using TGD AF (your rule)
+* Keep enough common markers for array performance (avoid too many monomorphic)
 
-* Remove near-monomorphic SNPs in Turkish AF (choose cutoff)
-* Keep a spread of MAF bins for robust genotyping (ensure enough common markers)
+8. **LD pruning (Turkey-aware)**
 
-9. LD redundancy control
+* Use Turkish genotype dataset (if you have PLINK) to clump/prune
+* Generate final per-trait SNP sets after LD control
 
-* Create Turkish LD reference from your genotype data
-* Clump per trait (r² + window) to reduce redundancy
-* Keep “must-have” SNPs even if in LD (top-weight, functional, well-known loci)
+9. **SNP-array design filters**
 
-10. Build trait panels
+* Remove SNPs in problematic regions / duplicates / design failures (vendor rules)
+* Finalise assayable list
 
-* For each trait/domain: compile candidate SNP list (post-clump)
-* Rank SNPs by: |weight|, PGS evidence strength, Turkish MAF, assayability flags
+10. **Build final deliverables**
 
-11. Merge into one array content
+* **Panel manifest**: `chr pos ref alt rsID AF_TURK beta trait PGS_ID flags`
+* **Scoring files** per trait: `varid A1 beta`
+* **QC list**: sex markers, sample ID, contamination markers, ancestry backbone
 
-* Combine all trait lists
-* Deduplicate overlaps
-* Resolve conflicts (same position different allele definitions → drop or fix)
+11. **Score + reference (if you have Turkish genotypes)**
 
-12. Add backbone content (array utility)
+* Extract panel SNPs from Turkish genotypes
+* Compute PRS per trait
+* Create Turkish reference percentiles (mean/SD, deciles)
 
-* Add genome-wide tag SNPs for ancestry/relatedness/QC
-* Add imputation backbone (Turkey-optimised if possible)
-* Add sex-check markers + contamination/sample-ID QC markers
+12. **Version + lock**
 
-13. Final array QC list
-
-* Verify biallelic, unique positions, consistent build
-* Verify effect allele alignment for every scored SNP
-* Freeze final manifest: SNP ID, chr, pos, REF, ALT, rsID, effect allele, weight, trait, PGS source, Turkish AF, design flags
-
-14. Wet-lab/vendor handoff package
-
-* Provide final SNP manifest in vendor-required format
-* Provide strand/orientation requirements and exclusions list
-
-15. Software scoring deliverable
-
-* Produce PLINK2 scoring files per trait (A1=effect allele, weight)
-* Produce harmonisation script to map vendor output → canonical REF/ALT
-* Produce reporting: z-score + percentile using Turkish reference distribution
-
-16. Turkish reference distribution
-
-* Compute mean/SD + percentiles per trait PRS from Turkish cohort genotypes
-* Store as versioned reference tables
-
-17. Validation (genotype + score)
-
-* Genotyping QC metrics targets (call rate, cluster separation)
-* Score stability checks: missingness sensitivity, batch effects, subgroup checks
-
-18. Versioning + updates
-
-* Version panel (SNP set), scoring weights, Turkish AF reference, and pipelines
-* Define update triggers (new PGS releases, new Turkish AF dataset, array redesign)
+* Version panel SNP list, PGS sources, TGD snapshot date, pipeline code
+* Save all intermediate tables (harmonised PGS, TGD AF, final manifest)
