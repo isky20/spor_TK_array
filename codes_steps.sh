@@ -1,0 +1,30 @@
+#Set file names
+PLR="PGS001921_(portability-PLR_fracture_5y).txt.gz"
+LDP="PGS002137_(portability-ldpred2_fracture_5y).txt.gz"
+
+REF_FA="/path/to/GRCh37.fa"   # hg19/GRCh37 fasta
+samtools faidx "$REF_FA"
+
+
+./harmonise_pgs_alt_effect_full.py --pgs "$PLR" --ref-fa "$REF_FA" --out PLR.harm.full.tsv.gz --drop-ambiguous
+./harmonise_pgs_alt_effect_full.py --pgs "$LDP" --ref-fa "$REF_FA" --out LDP.harm.full.tsv.gz --drop-ambiguous
+
+#2) Merge both into merged.harmonised.long.tsv.gz (with REF/ALT + PGS alleles)
+
+(
+  echo -e "varid\tchr\tpos\tref\talt\tA1\tbeta\tpgs_EA\tpgs_OA\tbeta_raw\tflip\tallele_fix\tmodel"
+  zcat PLR.harm.full.tsv.gz | awk 'NR>1{print $0"\tPLR"}'
+  zcat LDP.harm.full.tsv.gz | awk 'NR>1{print $0"\tLDpred2"}'
+) | gzip -c > merged.harmonised.long.tsv.gz
+
+
+zcat merged.harmonised.long.tsv.gz \
+| awk 'BEGIN{FS=OFS="\t"}
+  NR==1{print $0,"chr_pos_ref_alt"; next}
+  {print $0, $2"-"$3"-"$4"-"$5}
+' | gzip -c > merged.harmonised.long.with_id.tsv.gz
+
+zcat merged.harmonised.long.tsv.gz \
+| awk 'BEGIN{FS=OFS="\t"} NR==1{next} {print $2"-"$3"-"$4"-"$5}' \
+| sort -u > panel.chr-pos-ref-alt.txt
+
