@@ -1,4 +1,3 @@
-These are the **closest “same-idea”** references to your strategy (population-specific PRS use + ancestry calibration + multiple models for same trait):
 
 * **Lennon et al., Nature Medicine (2024)** — explicitly **uses genetic ancestry to calibrate PRS mean and variance** (same concept as your Turkish **mean/sd → z-score/percentile** interpretation). ([Nature][1])
 * **Busby et al., Nature Communications (2023)** — builds and validates **ancestry-specific PRSs**, and reports effects **per SD** and **percentile-based thresholds** (same idea: score within the intended ancestry group and interpret by distribution). ([Nature][2])
