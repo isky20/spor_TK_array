@@ -2,8 +2,8 @@
 PLR="PGS001921_(portability-PLR_fracture_5y).txt.gz"
 LDP="PGS002137_(portability-ldpred2_fracture_5y).txt.gz"
 
-REF_FA="/path/to/GRCh37.fa"   # hg19/GRCh37 fasta
-samtools faidx "$REF_FA"
+REF_FA="GRCh37.primary_assembly.genome.fa"   # hg19/GRCh37 fasta
+
 
 
 ./harmonise_pgs_alt_effect_full.py --pgs "$PLR" --ref-fa "$REF_FA" --out PLR.harm.full.tsv.gz --drop-ambiguous
@@ -24,7 +24,7 @@ zcat  merged.harmonised.long.clean.tsv.gz \
   {print $0, $2"-"$3"-"$4"-"$5}
 ' | gzip -c > merged.harmonised.long.with_id.tsv.gz
 
-zcat merged.harmonised.long.tsv.gz \
+zcat merged.harmonised.long.with_id.tsv.gz \
 | awk 'BEGIN{FS=OFS="\t"} NR==1{next} {print $2"-"$3"-"$4"-"$5}' \
 | sort -u > panel.chr-pos-ref-alt.txt
 
