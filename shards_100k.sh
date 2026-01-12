@@ -1,4 +1,4 @@
-IN="merged.harmonised.long.clean.with_id.tsv.gz"
+IN="merged.harmonised.long.with_id.tsv.gz"
 OUTDIR="shards_100k"
 STEP=100000
 
