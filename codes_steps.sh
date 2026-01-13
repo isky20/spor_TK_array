@@ -28,3 +28,9 @@ zcat merged.harmonised.long.with_id.tsv.gz \
 | awk 'BEGIN{FS=OFS="\t"} NR==1{next} {print $2"-"$3"-"$4"-"$5}' \
 | sort -u > panel.chr-pos-ref-alt.txt
 
+
+./run_turkish_bone_fraction.py \
+  --weights /home/projectadmin/isky20/01.projects/04.spor/Fitness_genomics/bon_fracture_downloads/merged.harmonised.long.with_id.tsv.gz \
+  --tgd /home/projectadmin/isky20/01.projects/04.spor/01.prs/genrisk/bone_fracture_PGP000263.csv \
+  --out turkish_bone_panel.tsv.gz \
+  --bad mismatches.tsv.gz
