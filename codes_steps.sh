@@ -34,3 +34,41 @@ zcat merged.harmonised.long.with_id.tsv.gz \
   --tgd /home/projectadmin/isky20/01.projects/04.spor/01.prs/genrisk/bone_fracture_PGP000263.csv \
   --out turkish_bone_panel.tsv.gz \
   --bad mismatches.tsv.gz
+
+====================================================================
+singularity exec ~/isky20/02.software/sifs/plink2.sif plink2 \
+  --vcf 203357_wgs_22799-gatk-haplotype.final.vcf \
+  --snps-only just-acgt \
+  --max-alleles 2 \
+  --set-all-var-ids @-#-\$r-\$a \
+  --make-pgen \
+  --out 203357
+=========================================================================
+MODEL="PLR"   # change this to LDpred2, PLR, etc.
+
+zcat turkish_bone_panel.tsv.gz | \
+awk -v MODEL="$MODEL" 'BEGIN{FS=OFS="\t"}
+NR==1{
+  for(i=1;i<=NF;i++){
+    if($i=="variant_id") vid=i;
+    if($i=="A1") a1=i;
+    if($i=="beta") b=i;
+    if($i=="model") m=i;
+  }
+  print "ID","A1",MODEL;
+  next
+}
+toupper($m)==toupper(MODEL) {print $vid,$a1,$b}' \
+> "${MODEL}.score.tsv"
+
+==============================================================================
+singularity exec ~/isky20/02.software/sifs/plink2.sif plink2   --pfile 203357 \
+--score LDpred2.score.tsv 1 2 3 header-read no-mean-imputation cols=+scoresums list-variants  \
+--out 203357_LDpred2_ref
+================================================================================
+./prs_zscore_from_panel_af.py \
+  --panel turkish_bone_panel.tsv.gz \
+  --used-vars 203357_LDpred2_ref.sscore.vars \
+  --sscore 203357_LDpred2_sum.sscore \
+  --model LDpred2 \
+  --sumcol LDpred2_SUM
